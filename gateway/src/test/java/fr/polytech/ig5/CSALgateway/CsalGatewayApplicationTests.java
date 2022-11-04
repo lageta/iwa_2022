@@ -1,10 +1,10 @@
-package fr.polytech.ig5.CSAL;
+package fr.polytech.ig5.CSALgateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CsalApplicationTests {
+class CsalGatewayApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,4 +1,4 @@
-package fr.polytech.ig5.CSAL.controller;
+package fr.polytech.ig5.CSALgateway.controller;
 
 import java.util.ArrayList;
 import java.util.List;

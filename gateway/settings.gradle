@@ -5,4 +5,5 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'CSAL'
+
+rootProject.name = 'CSAL-gateway'
