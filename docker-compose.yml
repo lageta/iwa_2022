@@ -10,7 +10,18 @@ services:
     depends_on:
       - db
     ports:
-      - 5001:5001
+      - 8080:8080
+
+  offers:
+    volumes:
+      - ./offers:/usr/src/app
+    build: ./offers
+    image: "offers/offers:23"
+    container_name: offers
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
 
 
   db:
