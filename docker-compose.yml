@@ -1,11 +1,11 @@
-version: '3.8'
+version: '3.3'
 
 services:
   gateway:
     volumes:
       - ./gateway:/usr/src/app
     build: ./gateway
-    image: "gateway/gateway:23"
+    image: "gateway:latest"
     container_name: gateway
     depends_on:
       - db
@@ -16,7 +16,7 @@ services:
     volumes:
       - ./offers:/usr/src/app
     build: ./offers
-    image: "offers/offers:23"
+    image: "offers:latest"
     container_name: offers
     depends_on:
       - db
