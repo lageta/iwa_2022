@@ -66,7 +66,7 @@ docker-deploy-production:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull "$CI_REGISTRY_IMAGE"/gateway:"$CI_COMMIT_REF_NAME"
 
-  stage: build
+  stage: deploy
   script:
     - echo "Deploy app here..."
     - heroku --version
@@ -90,7 +90,7 @@ docker-deploy-recette:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull "$CI_REGISTRY_IMAGE"/CI_COMMIT_BRANCH/gateway:"$CI_COMMIT_REF_NAME"
 
-  stage: build
+  stage: deploy
   script:
     - echo "Deploy app here..."
     - heroku --version
