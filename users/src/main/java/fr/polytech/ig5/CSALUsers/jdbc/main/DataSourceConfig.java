@@ -1,4 +1,4 @@
-package fr.polytech.ig5.CSALUsers;
+package fr.polytech.ig5.CSALUsers.jdbc.main;
 
 import javax.sql.DataSource;
 
@@ -19,12 +19,6 @@ public class DataSourceConfig {
     @Bean
     @ConfigurationProperties("spring.datasource")
     public DataSource getDataSource() {
-        /*DataSourceBuilder dsb = DataSourceBuilder.create();
-        return dsb.url("jdbc:postgresql://localhost:5432/postgres")
-                .driverClassName("org.postgresql.Driver")
-                .password("postgres")
-                .username("postgres")
-                .build();*/
         return DataSourceBuilder.create().build();
     }
 

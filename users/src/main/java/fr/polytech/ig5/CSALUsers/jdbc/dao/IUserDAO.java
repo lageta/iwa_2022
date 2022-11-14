@@ -10,9 +10,15 @@ public interface IUserDAO {
     public void save(User user);
 
     // Read
-    public User getByUsername(String username);
+    public User getById(int userId);
 
     // Read All
     public List<User> getAll();
+
+    // Update
+    public void update(User user);
+
+    // Delete
+    public void delete(int userId);
 
 }
