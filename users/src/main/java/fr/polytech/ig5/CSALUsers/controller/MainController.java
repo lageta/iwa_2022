@@ -9,16 +9,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import fr.polytech.ig5.CSALUsers.jdbc.dao.UserDAO;
+import fr.polytech.ig5.CSALUsers.service.IUserService;
 
 @Controller
 public class MainController {
 
     @Autowired
-    private UserDAO userDao;
+    private IUserService userService;
 
     @RequestMapping("/")
     public String index(Model model){
-        model.addAttribute("test",userDao.getAll().get(0));
+        model.addAttribute("test",userService.getAllUsers().get(0));
         return "index";
     }
 
