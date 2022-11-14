@@ -9,7 +9,7 @@
 /*==============================================================*/
 create table ADVANTAGE
 (
-    ADVANTAGE_ID     INT8        not null,
+    ADVANTAGE_ID     SERIAL        not null,
     LIBELLE_AVANTAGE VARCHAR(50) not null,
     constraint PK_ADVANTAGE primary key (ADVANTAGE_ID)
 );
@@ -159,7 +159,7 @@ create index INTEREST2_FK on INTEREST (
 /*==============================================================*/
 create table KEYWORD
 (
-    KEYWORD_ID INT8 not null,
+    KEYWORD_ID SERIAL not null,
     LIBELLE    VARCHAR(50) not null,
     constraint PK_KEYWORD primary key (KEYWORD_ID)
 );
@@ -184,7 +184,7 @@ create unique index KEYWORDS_PK on KEYWORD (
 /*==============================================================*/
 create table OFFER
 (
-    OFFER_ID          INT8 not null,
+    OFFER_ID          SERIAL not null,
     USER_ID           INT8 not null,
     ADDRESS           VARCHAR(50) not null,
     TITLE_OFFER       VARCHAR(50) not null,
@@ -295,7 +295,7 @@ create index RECOMMENDATE2_FK on RECOMMENDATE (
 /*==============================================================*/
 create table RESUME
 (
-    RESUME_ID    INT8        not null,
+    RESUME_ID    SERIAL        not null,
     USER_ID      INT8 not null,
     TITLE_RESUME VARCHAR(50) not null,
     DESCRIPTION_ TEXT        not null,
@@ -419,8 +419,8 @@ create index ADVANTAGES2_FK on TAGS (
 /*==============================================================*/
 create table USERS
 (
-    USER_ID   INT8         not null,
-    RESUME_ID INT8 not null,
+    USER_ID   SERIAL         not null,
+    RESUME_ID INT8 ,
     USERNAME  VARCHAR(50)  not null,
     PASSWORD  VARCHAR(500) not null,
     ENABLED   BOOLEAN      not null,
