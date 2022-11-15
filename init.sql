@@ -553,3 +553,6 @@ create table authorities
     constraint fk_authorities_users foreign key (user_id) references users (USER_ID)
 );
 create unique index ix_auth_username on authorities (user_id, authority);
+
+INSERT INTO users (user_id, resume_id, username, password, enabled, role, zone) VALUES (1, null, 'admin', '$2a$10$aRPrjVXsIk7DMx47YnmbwukDg7gNeKuCdZTAjRmFXn552fbrV6mIq', true, null, 1);
+INSERT INTO authorities (user_id, authority) VALUES (1, 'ROLE_ADMIN');
