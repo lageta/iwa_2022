@@ -88,4 +88,9 @@ public class OfferController {
         offerDao.deleteAllAdvantages(offerId);
     }
 
+    @DeleteMapping("/offers/outdated")
+    public void deleteOutdated(){
+        offerDao.delete(offerDao.outdatedOffers());
+    }
+
 }

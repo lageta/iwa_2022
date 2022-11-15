@@ -235,6 +235,23 @@ public class OfferDaoImpl implements OfferDao{
 
     }
 
+    @Override
+    public List<Offer> outdatedOffers(){
+        try {
+            return jdbcTemplate.query("select * from offer where date_end < current_date", rowMapper.getRowMapperOffer());
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
+    public void delete(List<Offer> offers){
+        for (Offer offer : offers){
+            delete(offer.getOfferId());
+        }
+    }
+
 
 
 }

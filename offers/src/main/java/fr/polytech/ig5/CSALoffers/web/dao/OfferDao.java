@@ -39,4 +39,8 @@ public interface OfferDao {
     void bindKeyword(int offerId, int keywordId);
 
     void bindAdvantage(int offerId, int advantageId);
+
+    List<Offer> outdatedOffers();
+
+    void delete(List<Offer> offers);
 }
