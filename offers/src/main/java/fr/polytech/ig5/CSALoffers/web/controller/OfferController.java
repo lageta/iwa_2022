@@ -1,5 +1,7 @@
 package fr.polytech.ig5.CSALoffers.web.controller;
 
+import fr.polytech.ig5.CSALoffers.model.Advantage;
+import fr.polytech.ig5.CSALoffers.model.Keyword;
 import fr.polytech.ig5.CSALoffers.model.Offer;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDao;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDaoImpl;
@@ -22,20 +24,68 @@ public class OfferController {
     public Offer offer(@PathVariable int id) {
         return  offerDao.findById(id);
     }
+
+    @GetMapping("/offer/{offerId}/keywords")
+    public List<Keyword> keywords(@PathVariable int offerId) {
+        return  offerDao.findAllKeyword(offerId);
+    }
+
+    @GetMapping("/offer/{advantageId}/advantages")
+    public List<Advantage> advantages(@PathVariable int advantageId) {
+        return  offerDao.findAllAdvantage(advantageId);
+    }
+
+    @GetMapping("/keywords")
+    public List<Keyword> keywords() {
+        return  offerDao.findAllKeyword();
+    }
+
+    @GetMapping("/advantages")
+    public List<Advantage> advantages() {
+        return  offerDao.findAllAdvantage();
+    }
+
+    @PostMapping(value = "/offer/{offerId}/keyword/{keywordId}")
+    public void bindKeyword(@PathVariable int offerId, @PathVariable int keywordId) {
+         offerDao.bindKeyword(offerId, keywordId);
+    }
+
+    @PostMapping(value = "/offer/{offerId}/advantage/{advantageId}")
+    public void bindAdvantage(@PathVariable int offerId, @PathVariable int advantageId) {
+        offerDao.bindAdvantage(offerId, advantageId);
+    }
+
     @PostMapping(value = "/offer")
     public Offer create(@RequestBody Offer offer) {
         return offerDao.save(offer);
     }
-    @PostMapping(value = "/test")
-    public String test() {
-        return "Test";
-    }
+
+
     @PutMapping(value = "/offer")
     public Offer update (@RequestBody Offer offer) {
         return offerDao.update(offer);
     }
+
     @DeleteMapping("/offer/{id}")
     public void delete(@PathVariable int id){
          offerDao.delete(id);
     }
+
+    @DeleteMapping("/offer/{offerId}/keyword/{keywordId}")
+    public void deleteKeyword(@PathVariable int offerId, @PathVariable int keywordId){
+        offerDao.deleteTags(offerId, keywordId);
+    }
+    @DeleteMapping("/offer/{offerId}/advantage/{advantageId}")
+    public void deleteAdvantage(@PathVariable int offerId, @PathVariable int advantageId){
+        offerDao.deleteAdvantages(offerId, advantageId);
+    }
+    @DeleteMapping("/offer/{offerId}/keywords")
+    public void deleteKeyword(@PathVariable int offerId){
+        offerDao.deleteAllTags(offerId);
+    }
+    @DeleteMapping("/offer/{offerId}/advantages")
+    public void deleteAdvantage(@PathVariable int offerId){
+        offerDao.deleteAllAdvantages(offerId);
+    }
+
 }
