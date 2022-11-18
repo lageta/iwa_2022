@@ -6,6 +6,7 @@ import fr.polytech.ig5.CSALoffers.model.Offer;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDao;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,11 @@ import java.util.List;
 public class OfferController {
     @Autowired
     OfferDao offerDao = new OfferDaoImpl();
+
+    @Autowired
+    private KafkaTemplate<String, Offer> kafkaTemplate;
+
+    private static final String TOPIC = "New_Offer";
 
     @GetMapping("/offers")
     public List<Offer> offers(){
@@ -57,7 +63,9 @@ public class OfferController {
 
     @PostMapping(value = "/offer")
     public Offer create(@RequestBody Offer offer) {
-        return offerDao.save(offer);
+        Offer offerCreated = offerDao.save(offer);
+        if (offerCreated != null)  kafkaTemplate.send(TOPIC, offerCreated);
+        return offerCreated;
     }
 
 
