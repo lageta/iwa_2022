@@ -29,6 +29,7 @@ public class MailServiceImpl implements MailService {
             javaMailSender.send(simpleMailMessage);
             return "Mail has been sent successfully...";
         }catch (Exception exception){
+            exception.printStackTrace();
             return "Error occurred while sending email";
         }
     }

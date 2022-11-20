@@ -2,6 +2,8 @@ package fr.polytech.ig5.CSALRecommendation.model;
 
 import java.util.Date;
 
+import java.util.Date;
+
 public class Offer {
     private int offerId;
     private int userId;
@@ -108,16 +110,5 @@ public class Offer {
         this.salary = salary;
     }
 
-    @Override
-    public String toString() {
-        return "Offer{" +
-                "address='" + address + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", startingDate=" + startingDate +
-                ", dateEnd=" + dateEnd +
-                ", nbjobs=" + nbjobs +
-                ", salary=" + salary +
-                '}';
-    }
+
 }
