@@ -14,10 +14,6 @@ public class KafkaConsumer {
     @KafkaListener(topics = "New_Offer", groupId = "group_json",
             containerFactory = "offerKafkaListenerFactory")
     public void consume(Offer offer) {
-        System.out.println("Consumed JSON Message: " + offer.toString());
-        String recipient = "axel.laget@gmail.com";
-        String body = offer.toString();
-        String subject = "This new offer correspond to your profile !";
-        mailService.sendMailWithAttachment(new MailDto());
+        System.out.println("Consumed JSON Message: " + offer.getTitle());
     }
 }

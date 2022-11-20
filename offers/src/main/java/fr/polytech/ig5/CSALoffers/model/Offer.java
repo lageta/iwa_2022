@@ -1,4 +1,4 @@
-package fr.polytech.ig5.CSALRecommendation.model;
+package fr.polytech.ig5.CSALoffers.model;
 
 import java.util.Date;
 
