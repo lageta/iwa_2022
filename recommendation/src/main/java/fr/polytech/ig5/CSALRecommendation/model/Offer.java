@@ -2,8 +2,6 @@ package fr.polytech.ig5.CSALRecommendation.model;
 
 import java.util.Date;
 
-import java.util.Date;
-
 public class Offer {
     private int offerId;
     private int userId;
