@@ -1,8 +1,11 @@
 package fr.polytech.ig5.CSALRecommendation.web.dto;
 
+import fr.polytech.ig5.CSALRecommendation.model.Offer;
 import lombok.AllArgsConstructor;
         import lombok.Data;
         import lombok.NoArgsConstructor;
+
+import javax.mail.Multipart;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +19,9 @@ public class MailDto {
     private String subject;
 
     private String attachment;
+
+    private Offer offer;
+
 
     public String getRecipient() {
         return recipient;
@@ -49,9 +55,20 @@ public class MailDto {
         this.attachment = attachment;
     }
 
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
+    }
+
     public MailDto(String recipient, String body, String subject) {
         this.recipient = recipient;
         this.body = body;
         this.subject = subject;
     }
+
+
+
 }

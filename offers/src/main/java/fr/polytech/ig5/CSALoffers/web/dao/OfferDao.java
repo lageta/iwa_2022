@@ -43,4 +43,6 @@ public interface OfferDao {
     List<Offer> outdatedOffers();
 
     void delete(List<Offer> offers);
+
+    void bindKeywords(Offer offer, List<Keyword> keywords);
 }

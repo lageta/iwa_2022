@@ -426,6 +426,7 @@ create table USERS
     ENABLED   BOOLEAN      not null,
     ROLE      VARCHAR(50) null,
     ZONE      INT4 not null,
+    MAIL      VARCHAR(50)  not null,
     constraint PK_USERS primary key (USER_ID)
 );
 
