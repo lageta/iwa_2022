@@ -47,8 +47,9 @@ public class OfferDaoImpl implements OfferDao{
     @Override
     public Offer save(Offer offer) {
         try {
-            jdbcTemplate.update("INSERT INTO offer ( user_id , address, title_offer, description_offer , starting_date, date_end, nb_jobs, salary) \n" +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+           return jdbcTemplate.query("INSERT INTO offer ( user_id , address, title_offer, description_offer , starting_date, date_end, nb_jobs, salary) \n" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *",
+                    rowMapper.getRowMapperOffer(),
                     offer.getUserId(),
                     offer.getAddress(),
                     offer.getTitle(),
@@ -57,10 +58,10 @@ public class OfferDaoImpl implements OfferDao{
                     offer.getDateEnd(),
                     offer.getNbjobs(),
                     offer.getSalary()
-                    );
-            return offer;
+                    ).get(0);
         }
         catch (Exception e){
+            e.printStackTrace();
             return null;
         }
 
@@ -252,6 +253,12 @@ public class OfferDaoImpl implements OfferDao{
         }
     }
 
+    @Override
+    public void bindKeywords(Offer offer, List<Keyword> keywords) {
+        for (Keyword keyword : keywords){
+            bindKeyword(offer.getOfferId(),keyword.getKeywordId());
+        }
+    }
 
 
 }

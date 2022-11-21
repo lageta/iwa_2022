@@ -1,6 +1,7 @@
 package fr.polytech.ig5.CSALRecommendation.web.controller;
 
 import fr.polytech.ig5.CSALRecommendation.model.Offer;
+import fr.polytech.ig5.CSALRecommendation.model.User;
 import fr.polytech.ig5.CSALRecommendation.web.dao.RecommendationDao;
 import fr.polytech.ig5.CSALRecommendation.web.dto.MailDto;
 import fr.polytech.ig5.CSALRecommendation.web.service.MailService;
@@ -20,8 +21,12 @@ public class RecommendationController {
     private MailService mailService;
 
     @GetMapping("/recommendate/{userId}")
-    public List<Offer> recommendate(@PathVariable int userId){
-        return  recommendationDao.recommendate(userId);
+    public List<Offer> recommendateOffers(@PathVariable int userId){
+        return  recommendationDao.recommendateOffers(userId);
+    }
+    @GetMapping("/recommendate/{offerId}")
+    public List<User> recommendateUsers(@PathVariable int offerId){
+        return  recommendationDao.recommendateUsers(offerId);
     }
 
     @GetMapping("/mail")
