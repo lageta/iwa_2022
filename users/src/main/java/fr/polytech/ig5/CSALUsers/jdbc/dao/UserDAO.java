@@ -24,8 +24,8 @@ public class UserDAO implements IUserDAO {
     @Override
     public void save(User user) {
         String query = "INSERT INTO "+ TABLE_NAME +" (resume_id, username, password, enabled, role, zone) values (?, ?, ?, ?, ?, ?);";
-
-        jdbcTemplate.update(query, user.getResumeId(), user.getUsername(), user.getPassword(), user.getEnabled(), user.getRole(), user.getZone());
+        
+        jdbcTemplate.update(query, null, user.getUsername(), user.getPassword(), user.getEnabled(), user.getRole(), user.getZone());
     }
 
     @Override

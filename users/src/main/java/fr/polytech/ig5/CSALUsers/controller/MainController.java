@@ -7,31 +7,59 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.polytech.ig5.CSALUsers.jdbc.model.User;
+import fr.polytech.ig5.CSALUsers.payload.RegisterPayload;
+import fr.polytech.ig5.CSALUsers.payload.UpdatePayload;
 import fr.polytech.ig5.CSALUsers.service.IUserService;
 
 @RestController
 public class MainController {
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
      
     @Autowired
     private IUserService userService;
 
-    @RequestMapping("/")
-    public User index(){
-        return userService.getAllUsers().get(0);
+    @RequestMapping("/users")
+    public List<User> getAll(){
+        return userService.getAllUsers();
     }
 
-    @PostMapping("/register")
-    public String doRegister(@ModelAttribute String user) {
-        return "";
+    @GetMapping("/user/{id}")
+    public User getOne(@PathVariable int id){
+        return userService.getUserById(id);
+    }
+
+    @PostMapping("/user/register")
+    public String doRegister(@RequestBody RegisterPayload payload) {
+        User user = new User();
+        user.setUsername(payload.getUsername());
+        user.setPassword(payload.getPassword());
+        user.setRole(payload.getRole());
+        // TODO: set to false after email confirmation implemented
+        user.setEnabled(true);
+
+        userService.addUser(user);
+
+        return "created";
+    }
+
+    @PutMapping("/user/update")
+    public String doUpdate(@RequestBody UpdatePayload payload){
+        return "updated";
+    }
+
+    @DeleteMapping("/logout")
+    public String logout() {
+        return "logged out";
     }
 
 }
