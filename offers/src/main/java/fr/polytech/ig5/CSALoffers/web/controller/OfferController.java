@@ -7,6 +7,8 @@ import fr.polytech.ig5.CSALoffers.web.controller.payload.CreatePayload;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDao;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,11 +65,11 @@ public class OfferController {
     }
 
     @PostMapping(value = "/offer")
-    public Offer create(@RequestBody CreatePayload payload) {
+    public ResponseEntity<Offer> create(@RequestBody CreatePayload payload) {
         Offer offerCreated = offerDao.save(payload.getOffer());
         offerDao.bindKeywords(offerCreated, payload.getKeywords());
         if (offerCreated != null)  {kafkaTemplate.send(TOPIC, offerCreated);}
-        return offerCreated;
+        return ResponseEntity.status(HttpStatus.CREATED).body(offerCreated);
     }
 
 

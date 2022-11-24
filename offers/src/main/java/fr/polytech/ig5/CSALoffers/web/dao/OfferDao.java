@@ -18,7 +18,7 @@ public interface OfferDao {
 
     Offer update(Offer offer);
 
-    int  delete(int id);
+    void  delete(int id);
 
     List<Keyword> findAllKeyword();
 
