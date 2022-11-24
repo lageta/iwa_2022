@@ -260,5 +260,15 @@ public class OfferDaoImpl implements OfferDao{
         }
     }
 
+    @Override
+    public List<Offer> findAllFromUser(int userId) {
+        try {
+            return jdbcTemplate.query("select * from offer where user_id = ?", rowMapper.getRowMapperOffer(),userId);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
 
 }

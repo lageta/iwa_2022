@@ -45,4 +45,6 @@ public interface OfferDao {
     void delete(List<Offer> offers);
 
     void bindKeywords(Offer offer, List<Keyword> keywords);
+
+    List<Offer> findAllFromUser(int userId);
 }

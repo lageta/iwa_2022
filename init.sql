@@ -80,6 +80,7 @@ create table AFFECT
 (
     USER_ID  INT8 not null,
     OFFER_ID INT8 not null,
+    IS_ACCEPTED     BOOLEAN,
     constraint PK_AFFECT primary key (USER_ID, OFFER_ID)
 );
 

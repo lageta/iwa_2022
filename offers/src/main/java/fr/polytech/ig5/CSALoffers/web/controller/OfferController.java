@@ -27,6 +27,12 @@ public class OfferController {
         return  offerDao.findAll();
     }
 
+    //TODO Liste des offres d'un autheur
+    @GetMapping("/offers/user/{userId}")
+    public List<Offer> offersFromUser(@PathVariable int userId){
+        return  offerDao.findAllFromUser(userId);
+    }
+
     @GetMapping("/offer/{id}")
     public Offer offer(@PathVariable int id) {
         return  offerDao.findById(id);
