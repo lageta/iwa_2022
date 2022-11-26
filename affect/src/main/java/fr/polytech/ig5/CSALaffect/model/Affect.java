@@ -8,10 +8,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
+
 @Table("users")
 public class Affect {
 
@@ -24,6 +27,6 @@ public class Affect {
     private  int user_id;
 
     @Column("is_accepted")
-    private boolean isAccepeted;
+    private boolean isAccepted;
 
 }
