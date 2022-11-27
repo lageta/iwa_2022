@@ -2,6 +2,7 @@ package fr.polytech.ig5.CSALUsers.service;
 
 import java.util.List;
 
+import fr.polytech.ig5.CSALUsers.jdbc.model.Resume;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,25 @@ public class UserService implements IUserService {
     public void deleteUser(int userId) {
         userDao.delete(userId);        
     }
-    
+
+    @Override
+    public Resume getResumeById(int resumeId) {
+        return userDao.getResumeById(resumeId);
+    }
+
+    @Override
+    public Resume addResume(Resume resume) {
+        return userDao.save(resume);
+    }
+
+    @Override
+    public Resume updateResume(Resume resume) {
+        return userDao.update(resume);
+    }
+
+    @Override
+    public int deleteResume(int resumeId) {
+        return userDao.deleteResume(resumeId);
+    }
+
 }
