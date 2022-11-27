@@ -3,6 +3,8 @@ package fr.polytech.ig5.CSALUsers.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.polytech.ig5.CSALUsers.jdbc.model.Resume;
+import fr.polytech.ig5.CSALUsers.payload.ResumePayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -60,6 +62,33 @@ public class MainController {
     @DeleteMapping("/logout")
     public String logout() {
         return "logged out";
+    }
+
+    @GetMapping("/resume/{resumeId}")
+    public Resume getOneResume(@PathVariable int resumeId){
+        return userService.getResumeById(resumeId);
+    }
+    @PutMapping("/resume/{resumeId}")
+    public Resume updateResume(@PathVariable int resumeId, @RequestBody ResumePayload payload){
+        Resume resume = new Resume();
+        resume.setUser_Id(payload.getUser_id());
+        resume.setTitle(payload.getTitle());
+        resume.setDescription(payload.getDescription());
+        resume.setResumeId(resumeId);
+        return userService.updateResume(resume);
+    }
+    @PostMapping("/resume")
+    public Resume createResume(@RequestBody ResumePayload payload){
+        Resume resume = new Resume();
+        resume.setUser_Id(payload.getUser_id());
+        resume.setTitle(payload.getTitle());
+        resume.setDescription(payload.getDescription());
+        return userService.addResume(resume);
+    }
+
+    @DeleteMapping("/resume/{resumeId}")
+    public  int deleteResume(@PathVariable int resumeId){
+        return userService.deleteResume(resumeId);
     }
 
 }
