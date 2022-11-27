@@ -48,6 +48,12 @@ docker-build-production:
     - docker push "$CI_REGISTRY_IMAGE"/users:"$CI_COMMIT_REF_NAME"
     - docker tag affect:latest "$CI_REGISTRY_IMAGE"/affect:"$CI_COMMIT_REF_NAME"
     - docker push "$CI_REGISTRY_IMAGE"/affect:"$CI_COMMIT_REF_NAME"
+    - docker tag confluentinc/cp-zookeeper:latest "$CI_REGISTRY_IMAGE"/zookeeper:"$CI_COMMIT_REF_NAME"
+    - docker push "$CI_REGISTRY_IMAGE"/zookeeper:"$CI_COMMIT_REF_NAME"
+    - docker tag confluentinc/cp-kafka:latest "$CI_REGISTRY_IMAGE"/kafka:"$CI_COMMIT_REF_NAME"
+    - docker push "$CI_REGISTRY_IMAGE"/kafka:"$CI_COMMIT_REF_NAME"
+
+
 
 
 ## Test 
