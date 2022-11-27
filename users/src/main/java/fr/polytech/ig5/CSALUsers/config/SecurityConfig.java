@@ -34,12 +34,12 @@ public class SecurityConfig {
     // @formatter:off
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        //http
             /*.securityMatcher("/users/**")
                 .authorizeHttpRequests()
                     .requestMatchers("/users/**").hasAuthority("SCOPE_message.read")
                     .and()*/
-            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+            //.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
     }
     // @formatter:on
