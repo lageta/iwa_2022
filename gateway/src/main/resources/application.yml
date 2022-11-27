@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application.name: csal-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: users
+          uri: http://users:8081
+          predicates:
+            - Path=/users
+          filters:
+            - TokenRelay=
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            provider: github
+            client-id: 02f69d9d679211743a76
+            client-secret: 2a30bd3009f8d5a9a5568231b34e8111581f623d
+          google:
+            provider: google
+            client-id: 820849683730-kvt87e7s5ftcr647dd0nmj7p6trsl97f.apps.googleusercontent.com
+            client-secret: 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

@@ -2,23 +2,27 @@ package fr.polytech.ig5.CSALUsers.config;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@Configuration(proxyBeanMethods = false)
 public class SecurityConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+
 
     @Autowired
     private DataSource dataSource;
@@ -27,31 +31,19 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // @formatter:off
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.jdbcAuthentication()
-            .dataSource(dataSource)
-            .passwordEncoder(passwordEncoder())
-            .usersByUsernameQuery("SELECT username, password, enabled from users where username = ?")
-            .authoritiesByUsernameQuery("SELECT u.username, a.authority " +
-            "FROM authorities a, users u " +
-            "WHERE u.username = ? " +
-            "AND u.user_id = a.user_id");
-        
-            AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
-
         http
-            .authenticationManager(authenticationManager)
-            .authorizeRequests( auth -> auth.anyRequest().authenticated())
-            .formLogin().permitAll().and().logout().permitAll().and().httpBasic();
-        return http
-                .cors().disable().csrf().disable()
-                .build();
+            /*.securityMatcher("/users/**")
+                .authorizeHttpRequests()
+                    .requestMatchers("/users/**").hasAuthority("SCOPE_message.read")
+                    .and()*/
+            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+        return http.build();
     }
+    // @formatter:on
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-      return (web) -> web.ignoring().antMatchers("/js/**", "/images/**"); 
-    }
+
+
 }
