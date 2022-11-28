@@ -546,13 +546,51 @@ alter table USERS
         references RESUME (RESUME_ID)
         on delete restrict on update restrict;
 
-create table authorities
-(
-    user_id  INT8 not null,
-    authority varchar(50) not null,
-    constraint fk_authorities_users foreign key (user_id) references users (USER_ID)
-);
-create unique index ix_auth_username on authorities (user_id, authority);
 
 INSERT INTO users (user_id, resume_id, username, password, enabled, role, zone) VALUES (1, null, 'admin', '$2a$10$aRPrjVXsIk7DMx47YnmbwukDg7gNeKuCdZTAjRmFXn552fbrV6mIq', true, null, 1);
 INSERT INTO authorities (user_id, authority) VALUES (1, 'ROLE_ADMIN');
+
+
+create table users (
+    id SERIAL UNIQUE,
+    resume_id int,
+    first_name varchar(50) not null,
+    last_name varchar(50) not null,
+    email_address varchar(50) not null,
+    password varchar(500) not null);
+
+create unique index idx_user_email on users (email_address);
+
+create table roles (
+  id SERIAL UNIQUE,
+  role_name varchar(50) not null
+);
+
+create unique index ids_roles_rolename on roles (role_name);
+
+create table user_roles (
+	id SERIAL,
+	user_id int not null,
+	role_id int not null,
+	constraint fk_userroles_user_id foreign key(user_id) references users(id),
+	constraint fk_userroles_role_id foreign key(role_id) references roles(id)
+);
+
+create unique index idx_user_role_id on user_roles (user_id, role_id);
+
+-- Password is admin01@123#
+INSERT INTO users (first_name, last_name, email_address, password)
+VALUES ('Super', 'Admin 01', 'admin01@tw.com', '$2a$10$4LEwPTJ86OF/oZUn8hl0vOhSUhFqX5YwNO./i/bTeTD6cn5lRLj2S');
+
+INSERT INTO roles (id, role_name)
+VALUES (1, 'ROLE_ADMIN');
+
+INSERT INTO roles (id, role_name)
+VALUES (2, 'ROLE_USER');
+
+
+INSERT INTO user_roles (user_id, role_id)
+select u.id, r.id
+from users u, roles r
+where u.email_address = 'admin01@tw.com'
+and r.role_name = 'ROLE_ADMIN';

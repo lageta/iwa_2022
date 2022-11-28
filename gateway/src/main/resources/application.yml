@@ -5,13 +5,13 @@ spring:
   application.name: csal-gateway
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay
       routes:
         - id: users
           uri: http://users:8081
           predicates:
             - Path=/users
-          filters:
-            - TokenRelay=
   security:
     oauth2:
       client:
