@@ -1,5 +1,6 @@
 package fr.polytech.ig5;
 
+import fr.polytech.ig5.jwt.AuthTokenFilter;
 import fr.polytech.ig5.jwt.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -19,6 +21,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
+    @Bean
+    public AuthTokenFilter getJWTAuthTokenFilter() throws Exception {
+        return new AuthTokenFilter();
+    }
     @Bean
     public AuthenticationManager getAuthenticationManager() throws Exception {
         return authenticationManager();
@@ -44,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilterBefore(getJWTAuthTokenFilter(),
+                        UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/actuator/**").permitAll()
                 .antMatchers("/api/v1/auth/token").permitAll()

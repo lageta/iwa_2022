@@ -33,15 +33,10 @@ public class AuthController {
         UsernamePasswordAuthenticationToken loginCredentials =
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUserName(), loginRequest.getPassword());
-        System.out.println("ici?");
-        System.out.println(loginCredentials);
         Authentication authentication =
                 authenticationManager.authenticate(loginCredentials);
-        System.out.println("ou ptet là");
         User user = (User) authentication.getPrincipal();
-        System.out.println("user :" + user);
         String jwtToken = jwtUtil.createJWT(user);
-        System.out.println("attention !");
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
