@@ -14,6 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth/")
 public class AuthController {
@@ -28,15 +31,25 @@ public class AuthController {
     @PostMapping(path = "/login",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getToken(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, Object>> getToken(@RequestBody LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken loginCredentials =
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUserName(), loginRequest.getPassword());
         Authentication authentication =
                 authenticationManager.authenticate(loginCredentials);
         User user = (User) authentication.getPrincipal();
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("email", user.getEmail());
+        userMap.put("firstname", user.getFirstName());
+        userMap.put("lastname", user.getLastName());
+        userMap.put("roles", user.getRoles());
+
         String jwtToken = jwtUtil.createJWT(user);
-        return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
+        Map<String, Object> body = new HashMap<>();
+        body.put("jwt", jwtToken);
+        body.put("user", userMap);
+
+        return new ResponseEntity<Map<String, Object>>(body, HttpStatus.OK);
 
     }
 
