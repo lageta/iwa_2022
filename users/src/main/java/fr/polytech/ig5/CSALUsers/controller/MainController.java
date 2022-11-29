@@ -28,7 +28,7 @@ public class MainController {
     @Autowired
     private IUserService userService;
 
-    @RequestMapping("/users")
+    @RequestMapping("/user/list")
     public List<User> getAll(){
         return userService.getAllUsers();
     }
@@ -36,20 +36,6 @@ public class MainController {
     @GetMapping("/user/{id}")
     public User getOne(@PathVariable int id){
         return userService.getUserById(id);
-    }
-
-    @PostMapping("/user/register")
-    public String doRegister(@RequestBody RegisterPayload payload) {
-        User user = new User();
-        user.setUsername(payload.getUsername());
-        user.setPassword(payload.getPassword());
-        user.setRole(payload.getRole());
-        // TODO: set to false after email confirmation implemented
-        user.setEnabled(true);
-
-        userService.addUser(user);
-
-        return "created";
     }
 
     @PutMapping("/user/update")

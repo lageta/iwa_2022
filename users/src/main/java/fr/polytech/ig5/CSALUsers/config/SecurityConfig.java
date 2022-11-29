@@ -13,8 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
@@ -34,12 +32,6 @@ public class SecurityConfig {
     // @formatter:off
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            /*.securityMatcher("/users/**")
-                .authorizeHttpRequests()
-                    .requestMatchers("/users/**").hasAuthority("SCOPE_message.read")
-                    .and()*/
-            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
     }
     // @formatter:on

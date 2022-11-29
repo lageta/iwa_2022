@@ -25,14 +25,14 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public void save(User user) {
-        String query = "INSERT INTO "+ TABLE_NAME_USER +" (resume_id, username, password, enabled, role, zone) values (?, ?, ?, ?, ?, ?);";
+        String query = "INSERT INTO "+ TABLE_NAME_USER +" (resume_id, first_name, last_name, email_address, password) values (?, ?, ?, ?, ?);";
         
-        jdbcTemplate.update(query, null, user.getUsername(), user.getPassword(), user.getEnabled(), user.getRole(), user.getZone());
+        jdbcTemplate.update(query, null, user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword());
     }
 
     @Override
     public User getById(int userId) {
-        String query = "SELECT * FROM "+ TABLE_NAME_USER +" WHERE user_id = ?;";
+        String query = "SELECT * FROM "+ TABLE_NAME_USER +" WHERE id = ?;";
 
         RowMapper<User> rowMapper = new UserRowMapper();
         User user = jdbcTemplate.queryForObject(query, rowMapper, userId);
@@ -49,21 +49,21 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public void update(User user) {
-        String query = "UPDATE "+ TABLE_NAME_USER + " SET resume_id=?, username=?, password=?, enabled=?, role=?, zone=? WHERE user_id=? ;";
+        String query = "UPDATE "+ TABLE_NAME_USER + " SET resume_id=?, first_name=?, last_name=?, email_address=?, password=?, WHERE id=? ;";
 
-        jdbcTemplate.update(query, user.getResumeId(), user.getUsername(), user.getPassword(), user.getEnabled(), user.getRole(), user.getZone(), user.getUserId());
+        jdbcTemplate.update(query, user.getResumeId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword(), user.getUserId());
     }
 
     @Override
     public void delete(int userId) {
-        String query = "DELETE FROM "+ TABLE_NAME_USER + " WHERE user_id = ? ;";
+        String query = "DELETE FROM "+ TABLE_NAME_USER + " WHERE id = ? ;";
 
         jdbcTemplate.update(query, userId);        
     }
 
     @Override
     public Resume save(Resume resume) {
-        String query = "INSERT INTO "+ TABLE_NAME_RESUME +" (user_id, title_resume, description_resume) values (?, ?, ?) RETURNING *;";
+        String query = "INSERT INTO "+ TABLE_NAME_RESUME +" (id, title_resume, description_resume) values (?, ?, ?) RETURNING *;";
         RowMapper<Resume> rowMapper = new ResumeRowMapper();
         jdbcTemplate.update(query,rowMapper,resume.getUser_Id(),resume.getTitle(), resume.getDescription());
         return resume;
@@ -79,7 +79,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public Resume update(Resume resume) {
-        String query = "UPDATE "+ TABLE_NAME_RESUME + " SET user_id=?, title_resume=?, description_resume=? WHERE resume_id=? ;";
+        String query = "UPDATE "+ TABLE_NAME_RESUME + " SET id=?, title_resume=?, description_resume=? WHERE resume_id=? ;";
         RowMapper<Resume> rowMapper = new ResumeRowMapper();
         jdbcTemplate.update(query, rowMapper,resume.getUser_Id(),resume.getTitle(), resume.getDescription() );
         return resume;

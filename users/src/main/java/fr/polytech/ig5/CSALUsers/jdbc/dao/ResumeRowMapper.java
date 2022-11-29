@@ -14,7 +14,7 @@ public class ResumeRowMapper implements RowMapper<Resume> {
     public Resume mapRow(ResultSet rs, int rowNum) throws SQLException {
         Resume resume = new Resume();
         resume.setResumeId(rs.getInt("resume_id"));
-        resume.setUser_Id(rs.getInt("user_id"));
+        resume.setUser_Id(rs.getInt("id"));
         resume.setTitle(rs.getString("title_resume"));
         resume.setDescription(rs.getString("description_resume"));
         return resume;
