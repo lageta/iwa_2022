@@ -24,10 +24,6 @@ public class AuthController {
     @Autowired
     private JWTUtil jwtUtil;
 
-    @GetMapping(path = "login")
-    public String login(){
-        return "login";
-    }
 
     @PostMapping(path = "/login",
             consumes = MediaType.APPLICATION_JSON_VALUE,
