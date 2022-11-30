@@ -5,27 +5,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UpdatePayload {
 
+    private final String firstname;
+    private final String lastname;
     private final String password;
-    private final String role;
-    private final String zone;
 
     @JsonCreator
-    public UpdatePayload(@JsonProperty("password") String password,
-                            @JsonProperty("role") String role, @JsonProperty("zone") String zone) {
+    public UpdatePayload(@JsonProperty("firstname") String firstname,
+                            @JsonProperty("lastname") String lastname, @JsonProperty("password") String password) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.password = password;
-        this.role = role;
-        this.zone = zone;
     }
     
     public String getPassword() {
         return password;
     }
 
-    public String getRole() {
-        return role;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public String getZone() {
-        return zone;
+    public String getLastname() {
+        return lastname;
     }
 }

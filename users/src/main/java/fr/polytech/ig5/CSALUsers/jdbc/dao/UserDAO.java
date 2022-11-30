@@ -49,9 +49,9 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public void update(User user) {
-        String query = "UPDATE "+ TABLE_NAME_USER + " SET resume_id=?, first_name=?, last_name=?, email_address=?, password=?, WHERE id=? ;";
+        String query = "UPDATE "+ TABLE_NAME_USER + " SET first_name=?, last_name=?, password=?, WHERE id=? ;";
 
-        jdbcTemplate.update(query, user.getResumeId(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getPassword(), user.getUserId());
+        jdbcTemplate.update(query, user.getFirstname(), user.getLastname(),  user.getPassword(), user.getUserId());
     }
 
     @Override
