@@ -42,6 +42,7 @@ public class JWTUtil {
 
     private static final String CLAIM_FIRST_NAME_KEY = "FirstName";
     private static final String CLAIM_LAST_NAME_KEY = "LastName";
+    private static final String CLAIM_ROLES_KEY = "roles";
 
 
     public String createJWT(User user) {
@@ -56,6 +57,7 @@ public class JWTUtil {
                                 Duration.ofSeconds(timeToLiveInSeconds))))
                         .claim(CLAIM_FIRST_NAME_KEY, user.getFirstName())
                         .claim(CLAIM_LAST_NAME_KEY, user.getLastName())
+                        .claim(CLAIM_ROLES_KEY, user.getRoles())
                         .signWith(secretKey)
                         .compact();
         return jwt;

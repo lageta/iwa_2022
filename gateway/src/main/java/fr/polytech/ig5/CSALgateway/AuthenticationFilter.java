@@ -2,6 +2,8 @@ package fr.polytech.ig5.CSALgateway;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -11,6 +13,8 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.*;
 
 @RefreshScope
 @Component
@@ -58,9 +62,11 @@ public class AuthenticationFilter implements GatewayFilter {
 
     private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {
         Claims claims = jwtUtil.getAllClaimsFromToken(token);
+        LinkedHashMap<Object, Object> json = (LinkedHashMap<Object, Object>) ((ArrayList)claims.get("roles")).get(0);
+
         exchange.getRequest().mutate()
-                .header("id", String.valueOf(claims.get("id")))
-                .header("role", String.valueOf(claims.get("role")))
+                .header("email", String.valueOf(claims.get("sub")))
+                .header("role", String.valueOf(json.get("name")))
                 .build();
     }
 }
