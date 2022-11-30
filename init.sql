@@ -501,8 +501,6 @@ create table roles (
   role_name varchar(50) not null
 );
 
-create unique index ids_roles_rolename on roles (role_name);
-
 create table user_roles (
 	id SERIAL,
 	user_id int not null,
