@@ -32,8 +32,8 @@ public class SecurityConfig {
     // @formatter:off
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .cors().disable()
+        http.httpBasic();
+        return http.cors().disable()
                 .csrf().disable().build();
     }
     // @formatter:on
