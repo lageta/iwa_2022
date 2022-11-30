@@ -14,7 +14,6 @@ import java.util.List;
 @Repository
 public class OfferDaoImpl implements OfferDao{
 
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -86,21 +85,21 @@ public class OfferDaoImpl implements OfferDao{
                     offer.getOfferId()).get(0);
         }
         catch (Exception e){
-            return null;
+            e.printStackTrace();
         }
+        return null;
+
     }
 
     @Override
-    public int delete(int id) {
+    public void delete(int id) {
         try {
             deleteAllTags(id);
             deleteAllAdvantages(id);
             jdbcTemplate.update("DELETE FROM affect WHERE offer_id = ?", id);
             int res = jdbcTemplate.update("DELETE FROM offer WHERE offer_id = ?", id);
-            return res;
         }
         catch (Exception e){
-            return -1;
         }
 
     }
@@ -215,7 +214,7 @@ public class OfferDaoImpl implements OfferDao{
 
         }
         catch (Exception e){
-
+            e.printStackTrace();
         }
 
     }
