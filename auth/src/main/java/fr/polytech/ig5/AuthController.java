@@ -45,6 +45,7 @@ public class AuthController {
                 authenticationManager.authenticate(loginCredentials);
         User user = (User) authentication.getPrincipal();
         Map<String, Object> userMap = new HashMap<>();
+        userMap.put("userId", user.getId());
         userMap.put("email", user.getEmail());
         userMap.put("firstname", user.getFirstName());
         userMap.put("lastname", user.getLastName());
