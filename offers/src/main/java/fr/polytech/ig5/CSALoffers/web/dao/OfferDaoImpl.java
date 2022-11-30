@@ -26,6 +26,8 @@ public class OfferDaoImpl implements OfferDao{
             return jdbcTemplate.query("select * from offer", rowMapper.getRowMapperOffer());
         }
         catch (Exception e) {
+            e.printStackTrace();
+
             return null;
         }
 
@@ -38,6 +40,8 @@ public class OfferDaoImpl implements OfferDao{
             return jdbcTemplate.query("select * from offer where offer_id = ?", rowMapper.getRowMapperOffer(), id).get(0);
         }
         catch (Exception e){
+            e.printStackTrace();
+
             return null;
         }
 
@@ -68,12 +72,15 @@ public class OfferDaoImpl implements OfferDao{
 
     @Override
     public Offer update(Offer offer){
+        System.out.println(offer.toString());
         try {
             return jdbcTemplate.query("UPDATE offer \n" +
+                            "\n" +
                             "SET user_id = ?, address= ?, title_offer= ?,\n" +
+                            "\n" +
                             "description_offer = ?, starting_date= ?, date_end= ?,\n" +
-                            "nb_jobs= ?, salary= ?" +
-                            "WHERE offer_id = ?", rowMapper.getRowMapperOffer(),offer.getOfferId(),
+                            "\n" +
+                            "nb_jobs= ?, salary= ? WHERE offer_id = ? RETURNING *", rowMapper.getRowMapperOffer(),
                     offer.getUserId(),
                     offer.getAddress(),
                     offer.getTitle(),
@@ -100,6 +107,7 @@ public class OfferDaoImpl implements OfferDao{
             int res = jdbcTemplate.update("DELETE FROM offer WHERE offer_id = ?", id);
         }
         catch (Exception e){
+            e.printStackTrace();
         }
 
     }
@@ -110,6 +118,8 @@ public class OfferDaoImpl implements OfferDao{
             return jdbcTemplate.query("select * from keyword", rowMapper.getRowMapperKeyword());
         }
         catch (Exception e) {
+            e.printStackTrace();
+
             return null;
         }
 
@@ -123,6 +133,8 @@ public class OfferDaoImpl implements OfferDao{
                     " WHERE keyword_id IN (select keyword_id from tags where offer_id = ?) ", rowMapper.getRowMapperKeyword(), offerId);
         }
         catch (Exception e) {
+            e.printStackTrace();
+
             return null;
         }
 
@@ -135,6 +147,8 @@ public class OfferDaoImpl implements OfferDao{
             return jdbcTemplate.query("select * from advantage", rowMapper.getRowMapperAdvantage());
         }
         catch (Exception e) {
+            e.printStackTrace();
+
             return null;
         }
 
@@ -149,6 +163,8 @@ public class OfferDaoImpl implements OfferDao{
                     " WHERE advantage_id IN (select advantage_id from advantages where offer_id = ?) ", rowMapper.getRowMapperAdvantage(), offerId);
         }
         catch (Exception e) {
+            e.printStackTrace();
+
             return null;
         }
 
@@ -162,6 +178,8 @@ public class OfferDaoImpl implements OfferDao{
             return res;
         }
         catch (Exception e){
+            e.printStackTrace();
+
             return -1;
         }
 
@@ -174,6 +192,8 @@ public class OfferDaoImpl implements OfferDao{
             return res;
         }
         catch (Exception e){
+            e.printStackTrace();
+
             return -1;
         }
 
@@ -186,6 +206,8 @@ public class OfferDaoImpl implements OfferDao{
             return res;
         }
         catch (Exception e){
+            e.printStackTrace();
+
             return -1;
         }
 
@@ -198,6 +220,8 @@ public class OfferDaoImpl implements OfferDao{
             return res;
         }
         catch (Exception e){
+            e.printStackTrace();
+
             return -1;
         }
 
@@ -214,7 +238,7 @@ public class OfferDaoImpl implements OfferDao{
 
         }
         catch (Exception e){
-            e.printStackTrace();
+
         }
 
     }
@@ -253,9 +277,30 @@ public class OfferDaoImpl implements OfferDao{
     }
 
     @Override
-    public void bindKeywords(Offer offer, List<Keyword> keywords) {
+    public void bindKeywords(int offerId, List<Keyword> keywords) {
         for (Keyword keyword : keywords){
-            bindKeyword(offer.getOfferId(),keyword.getKeywordId());
+            bindKeyword(offerId,keyword.getKeywordId());
+        }
+    }
+
+
+
+    @Override
+    public void bindAdvantages(int offerId, List<Advantage> advantages) {
+            for (Advantage advantage : advantages){
+            bindAdvantage(offerId,advantage.getAdvantageId());
+        }
+    }
+
+
+    @Override
+    public List<Offer> findAllFromUser(int userId) {
+        try {
+            return jdbcTemplate.query("select * from offer where user_id = ?", rowMapper.getRowMapperOffer(),userId);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

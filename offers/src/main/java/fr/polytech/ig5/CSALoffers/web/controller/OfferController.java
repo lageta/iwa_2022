@@ -29,6 +29,11 @@ public class OfferController {
         return  offerDao.findAll();
     }
 
+    @GetMapping("/offers/user/{userId}")
+    public List<Offer> offersFromUser(@PathVariable int userId){
+        return  offerDao.findAllFromUser(userId);
+    }
+
     @GetMapping("/offer/{id}")
     public Offer offer(@PathVariable int id) {
         return  offerDao.findById(id);
@@ -65,17 +70,43 @@ public class OfferController {
     }
 
     @PostMapping(value = "/offer")
-    public ResponseEntity<Offer> create(@RequestBody CreatePayload payload) {
+    public Offer create(@RequestBody CreatePayload payload) {
         Offer offerCreated = offerDao.save(payload.getOffer());
-        offerDao.bindKeywords(offerCreated, payload.getKeywords());
-        if (offerCreated != null)  {kafkaTemplate.send(TOPIC, offerCreated);}
-        return ResponseEntity.status(HttpStatus.CREATED).body(offerCreated);
+        if (payload.getKeywords() != null) {
+            offerDao.bindKeywords(offerCreated.getOfferId(), payload.getKeywords());
+            if (offerCreated != null) {
+                kafkaTemplate.send(TOPIC, offerCreated);
+            }
+        }
+
+        if (payload.getAdvantages() != null){
+            offerDao.bindAdvantages(offerCreated.getOfferId(), payload.getAdvantages());
+        }
+
+        return offerCreated;
     }
 
 
 
-    @PutMapping(value = "/offer")
-    public Offer update (@RequestBody Offer offer) {
+    @PutMapping(value = "/offer/{offerId}")
+    public Offer update (@PathVariable int offerId,@RequestBody CreatePayload payload) {
+        Offer offer = payload.getOffer();
+        if (offer == null) return null;
+        offer.setOfferId(offerId);
+        List<Keyword> keywords = payload.getKeywords();
+        if (keywords != null){
+            offerDao.deleteAllTags(offerId);
+            if (keywords.size() > 0){
+                offerDao.bindKeywords(offerId, keywords);
+            }
+        }
+        List<Advantage> advantages = payload.getAdvantages();
+        if (advantages != null){
+            offerDao.deleteAllAdvantages(offerId);
+            if (advantages.size() > 0){
+                offerDao.bindAdvantages(offerId, advantages);
+            }
+        }
         return offerDao.update(offer);
     }
 

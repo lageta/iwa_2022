@@ -45,6 +45,27 @@ services:
     ports:
       - "8000:8000"
 
+  affect:
+    volumes:
+      - ./affect:/usr/src/app
+    build: ./affect
+    image: "affect:latest"
+    container_name: affect
+    depends_on:
+      - db
+    ports:
+      - "7575:7575"
+  users:
+    volumes:
+      - ./users:/usr/src/app
+    build: ./users
+    image: "users:latest"
+    container_name: users
+    depends_on:
+      - db
+    ports:
+      - "8500:8500"
+
   recommendation:
     volumes:
       - ./recommendation:/usr/src/app

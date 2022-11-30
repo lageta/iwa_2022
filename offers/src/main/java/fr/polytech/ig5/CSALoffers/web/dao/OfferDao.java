@@ -44,5 +44,11 @@ public interface OfferDao {
 
     void delete(List<Offer> offers);
 
-    void bindKeywords(Offer offer, List<Keyword> keywords);
+    void bindKeywords(int offerId, List<Keyword> keywords);
+
+
+    void bindAdvantages(int offerId, List<Advantage> advantages);
+
+
+    List<Offer> findAllFromUser(int userId);
 }
