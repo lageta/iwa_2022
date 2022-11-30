@@ -415,63 +415,6 @@ create index ADVANTAGES2_FK on TAGS (
                                      OFFER_ID
     );
 
-/*==============================================================*/
-/* Table : USERS                                                */
-/*==============================================================*/
-create table USERS
-(
-    USER_ID   SERIAL         not null,
-    RESUME_ID INT8 ,
-    USERNAME  VARCHAR(50)  not null,
-    PASSWORD  VARCHAR(500) not null,
-    ENABLED   BOOLEAN      not null,
-    ROLE      VARCHAR(50) null,
-    ZONE      INT4 not null,
-    MAIL      VARCHAR(50)  not null,
-    constraint PK_USERS primary key (USER_ID)
-);
-
-comment
-on table USERS is
-'Table of the users';
-
-comment
-on column USERS.USER_ID is
-'Id of the User';
-
-comment
-on column USERS.RESUME_ID is
-'Id of the resume';
-
-comment
-on column USERS.USERNAME is
-'Login of an user';
-
-comment
-on column USERS.PASSWORD is
-'Password of the user';
-
-comment
-on column USERS.ROLE is
-'Role of the  user : Job Seeker, Employer etc...';
-
-comment
-on column USERS.ZONE is
-'Area in which an user is seeking for a job, ex:+50km ';
-
-/*==============================================================*/
-/* Index : USER_PK                                              */
-/*==============================================================*/
-create unique index USER_PK on USERS (
-                                      USER_ID
-    );
-
-/*==============================================================*/
-/* Index : HAVE_FK                                              */
-/*==============================================================*/
-create index HAVE_FK on USERS (
-                               RESUME_ID
-    );
 
 alter table ADVANTAGES
     add constraint FK_ADVANTAG_ADVANTAGE_OFFER foreign key (OFFER_ID)
@@ -543,15 +486,46 @@ alter table TAGS
         references OFFER (OFFER_ID)
         on delete restrict on update restrict;
 
-alter table USERS
-    add constraint FK_USERS_HAVE_RESUME foreign key (RESUME_ID)
-        references RESUME (RESUME_ID)
-        on delete restrict on update restrict;
 
-create table authorities
-(
-    user_id  INT8 not null,
-    authority varchar(50) not null,
-    constraint fk_authorities_users foreign key (user_id) references users (USER_ID)
+create table users (
+    id SERIAL UNIQUE,
+    resume_id int,
+    first_name varchar(50) not null,
+    last_name varchar(50) not null,
+    email_address varchar(50) not null,
+    password varchar(500) not null);
+
+create unique index idx_user_email on users (email_address);
+
+create table roles (
+  id SERIAL UNIQUE,
+  role_name varchar(50) not null
 );
-create unique index ix_auth_username on authorities (user_id, authority);
+
+create table user_roles (
+	id SERIAL,
+	user_id int not null,
+	role_id int not null,
+	constraint fk_userroles_user_id foreign key(user_id) references users(id),
+	constraint fk_userroles_role_id foreign key(role_id) references roles(id)
+);
+
+create unique index idx_user_role_id on user_roles (user_id, role_id);
+
+-- Password is admin01@123#
+INSERT INTO users (first_name, last_name, email_address, password)
+VALUES ('Super', 'Admin 01', 'admin01@tw.com', '$2a$10$4LEwPTJ86OF/oZUn8hl0vOhSUhFqX5YwNO./i/bTeTD6cn5lRLj2S');
+
+
+INSERT INTO roles (id, role_name)
+VALUES (1, 'ROLE_ADMIN');
+
+INSERT INTO roles (id, role_name)
+VALUES (2, 'ROLE_USER');
+
+
+INSERT INTO user_roles (user_id, role_id)
+select u.id, r.id
+from users u, roles r
+where u.email_address = 'admin01@tw.com'
+and r.role_name = 'ROLE_ADMIN';

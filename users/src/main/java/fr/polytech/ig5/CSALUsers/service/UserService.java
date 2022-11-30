@@ -2,6 +2,7 @@ package fr.polytech.ig5.CSALUsers.service;
 
 import java.util.List;
 
+import fr.polytech.ig5.CSALUsers.jdbc.model.Resume;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import fr.polytech.ig5.CSALUsers.jdbc.model.User;
 
 @Service
 public class UserService implements IUserService {
-
+    
     @Autowired
     private IUserDAO userDao;
 
@@ -26,6 +27,9 @@ public class UserService implements IUserService {
 
     @Override
     public boolean addUser(User user) {
+        // TODO: Test if username && email already exist
+
+        // Encode before saving in db
         userDao.save(user);
         return true;
     }
@@ -39,5 +43,25 @@ public class UserService implements IUserService {
     public void deleteUser(int userId) {
         userDao.delete(userId);        
     }
-    
+
+    @Override
+    public Resume getResumeById(int resumeId) {
+        return userDao.getResumeById(resumeId);
+    }
+
+    @Override
+    public Resume addResume(Resume resume) {
+        return userDao.save(resume);
+    }
+
+    @Override
+    public Resume updateResume(Resume resume) {
+        return userDao.update(resume);
+    }
+
+    @Override
+    public int deleteResume(int resumeId) {
+        return userDao.deleteResume(resumeId);
+    }
+
 }

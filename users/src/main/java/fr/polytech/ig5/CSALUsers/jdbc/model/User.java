@@ -3,11 +3,12 @@ package fr.polytech.ig5.CSALUsers.jdbc.model;
 public class User {
 	private int userId;
 	private int resumeId;
-    private String username;
+    private String email_address;
     private String password;
-    private boolean enabled;
-	private String role;
-	private int zone;
+
+	private String firstname;
+
+	private String lastname;
 
 	/* USER ID */
 
@@ -31,12 +32,12 @@ public class User {
 
 	/* USERNAME */
 
-    public String getUsername() {
-		return username;
+    public String getEmail() {
+		return email_address;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String username) {
+		this.email_address = email_address;
 	}
 
 	/* PASSWORD */
@@ -49,38 +50,25 @@ public class User {
 		this.password = password;
 	}
 
-	/* ENABLED */
 
-	public boolean getEnabled() {
-		return enabled;
-	}
-	
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	/* ROLE */
-
-	public String getRole() {
-		return role;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public String getLastname() {
+		return lastname;
 	}
 
-	/* ZONE */
-
-	public int getZone() {
-		return zone;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
-	public void setZone(int zone) {
-		this.zone = zone;
-	}
-	
 	@Override
 	public String toString(){
-		return "{userId="+userId+ ", username="+username+",password="+password+",enabled="+enabled+"}";
+		return "{userId="+userId+ ", email_address="+email_address+",password="+password+"}";
 	}
 }
