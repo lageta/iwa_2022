@@ -41,7 +41,7 @@ public class MainController {
         u.setUserId(1);
         u.setFirstname(payload.getFirstname());
         u.setLastname(payload.getLastname());
-        u.setPassword(payload.getLastname());
+        u.setPassword(payload.getPassword());
         userService.updateUser(u);
         return ResponseEntity.ok().build();
     }
