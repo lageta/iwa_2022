@@ -23,7 +23,9 @@ public interface IUserDAO {
     public void delete(int userId);
 
     //Create
-    public Resume save(Resume resume);
+    public int save(Resume resume);
+
+    public void setResume(int r, int u);
 
     //Read
     public  Resume getResumeById(int resumeId);

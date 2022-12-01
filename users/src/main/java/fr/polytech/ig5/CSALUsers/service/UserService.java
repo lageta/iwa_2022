@@ -55,7 +55,9 @@ public class UserService implements IUserService {
 
     @Override
     public Resume addResume(Resume resume) {
-        return userDao.save(resume);
+        int r = userDao.save(resume);
+        userDao.setResume(r, resume.getUser_Id());
+        return resume;
     }
 
     @Override

@@ -37,4 +37,14 @@ public class Resume {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Resume{" +
+                "resumeId=" + resumeId +
+                ", user_Id=" + user_Id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

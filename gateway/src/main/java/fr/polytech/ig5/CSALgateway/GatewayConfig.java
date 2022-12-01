@@ -18,7 +18,9 @@ public class GatewayConfig {
                 .route("user-service", r -> r.path("/user/**")
                         .filters(f -> f.filter(filter))
                         .uri("http://users:8081"))
-
+                .route("user-service", r -> r.path("/resume/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("http://users:8081"))
                 .route("auth-service", r -> r.path("/auth/**")
                         .filters(f -> f.filter(filter))
                         .uri("http://auth:8082"))

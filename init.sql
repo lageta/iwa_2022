@@ -299,7 +299,7 @@ create table RESUME
     RESUME_ID    SERIAL        not null,
     USER_ID      INT8 not null,
     TITLE_RESUME VARCHAR(50) not null,
-    DESCRIPTION_ TEXT        not null,
+    DESCRIPTION_RESUME TEXT        not null,
     constraint PK_RESUME primary key (RESUME_ID)
 );
 
