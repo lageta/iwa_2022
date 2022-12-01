@@ -1,108 +1,53 @@
 package fr.polytech.ig5.CSALaffect.model;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.relational.core.mapping.Table;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import java.util.Collection;
+import java.util.Set;
 
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
-@Table("users")
+@Entity
+@Table(name = "users")
 public class User {
-    private int userId;
-    private int resumeId;
-    private String username;
-    private String password;
-    private boolean enabled;
-    private String role;
-    private int zone;
-    private String mail;
 
-    /* USER ID */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    public int getUserId() {
-        return userId;
-    }
+	@Column(name = "resume_id")
+	private int resume_id;
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+	@NotNull
+	@Column(name = "first_name")
+	private String firstName;
 
-    /* RESUME ID */
+	@NotNull
+	@Column(name = "last_name")
+	private String lastName;
 
-    public int getResumeId() {
-        return resumeId;
-    }
 
-    public void setResumeId(int resumeId) {
-        this.resumeId = resumeId;
-    }
+	@Email
+	@Column(name = "email_address")
+	private String email;
 
-    /* USERNAME */
+	@NotNull
+	@JsonIgnore
+	private String password;
 
-    public String getUsername() {
-        return username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /* PASSWORD */
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /* ENABLED */
-
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    /* ROLE */
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    /* ZONE */
-
-    public int getZone() {
-        return zone;
-    }
-
-    public void setZone(int zone) {
-        this.zone = zone;
-    }
-
-    /* MAIL */
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    @Override
-    public String toString(){
-        return "{userId="+userId+ ", username="+username+",password="+password+",enabled="+enabled+"}";
-    }
 }

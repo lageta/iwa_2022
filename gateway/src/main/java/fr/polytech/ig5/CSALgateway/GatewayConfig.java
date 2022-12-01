@@ -28,12 +28,27 @@ public class GatewayConfig {
                         .filters(f -> f.filter(filter))
                         .uri("http://offers:8000"))
 
+
+                .route("affect-service", r -> r.path("/affect/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("http://affect:7575"))
+                .route("affect-service", r -> r.path("/nbaffected/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("http://affect:7575"))
+                .route("affect-service", r -> r.path("/nbjobs/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("http://affect:7575"))
+
+
                 .route("user-service", r -> r.path("/user/**")
                         .filters(f -> f.filter(filter))
                         .uri("http://users:8081"))
                 .route("user-service", r -> r.path("/resume/**")
                         .filters(f -> f.filter(filter))
                         .uri("http://users:8081"))
+
+
+
 
                 .route("auth-service", r -> r.path("/auth/**")
                         .filters(f -> f.filter(filter))

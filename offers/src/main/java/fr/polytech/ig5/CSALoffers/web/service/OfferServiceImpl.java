@@ -104,4 +104,21 @@ public class OfferServiceImpl implements  OfferService{
     public List<Offer> findAllFromUser(int userId) {
         return offerDao.findAllFromUser(userId);
     }
+
+    @Override
+    public List<Keyword> findAllKeywordOfUser(int userId) {
+        return offerDao.findAllKeywordOfUser(userId);
+    }
+
+    @Override
+    public void bindKeywordToUser(Keyword keyword, int userId) {
+        offerDao.bindKeywordToUser(keyword, userId);
+        
+    }
+
+    @Override
+    public void deleteKeywordsOfUser(int userId) {
+        offerDao.deleteKeywordsOfUser(userId);
+        
+    }
 }

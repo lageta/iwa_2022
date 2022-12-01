@@ -36,5 +36,9 @@ public interface IUserDAO {
     // Delete
     public int deleteResume(int resumeId);
 
+    public void rateUser(int origin, int target, int score);
+
+    public double getRate(int userId);
+
 
 }

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import fr.polytech.ig5.CSALUsers.jdbc.model.User;
+import fr.polytech.ig5.CSALUsers.payload.RatePayload;
 import fr.polytech.ig5.CSALUsers.payload.RegisterPayload;
 import fr.polytech.ig5.CSALUsers.payload.UpdatePayload;
 import fr.polytech.ig5.CSALUsers.service.IUserService;
@@ -57,6 +59,18 @@ public class MainController {
         u.setLastname(payload.getLastname());
         u.setPassword(payload.getPassword());
         userService.updateUser(u);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/user/{id}/rate")
+    public ResponseEntity<Double> getRate(@PathVariable int id){
+        double rate = userService.getRate(id);
+        return new ResponseEntity<>(rate, HttpStatus.OK);
+    }
+
+    @PostMapping("/user/{target_id}/rate")
+    public ResponseEntity<?> doRate(@PathVariable int target_id, @RequestBody RatePayload payload){
+        userService.rateUser(payload.getOrigin_id(), target_id, payload.getScore());
         return ResponseEntity.ok().build();
     }
 

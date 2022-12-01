@@ -21,6 +21,8 @@ public interface OfferDao {
 
     List<Keyword> findAllKeyword();
 
+    List<Keyword> findAllKeywordOfUser(int userId);
+
     List<Keyword> findAllKeyword(int offerId);
 
     List<Advantage> findAllAdvantage();
@@ -37,9 +39,13 @@ public interface OfferDao {
 
     void bindKeyword(int offerId, int keywordId);
 
+    void bindKeywordToUser(Keyword keyword, int userId);
+
     void bindAdvantage(int offerId, int advantageId);
 
     List<Offer> outdatedOffers();
+
+    void deleteKeywordsOfUser(int userId);
 
     void delete(List<Offer> offers);
 

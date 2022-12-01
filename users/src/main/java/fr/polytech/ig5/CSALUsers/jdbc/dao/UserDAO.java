@@ -119,4 +119,16 @@ public class UserDAO implements IUserDAO {
         return jdbcTemplate.update(query, resumeId);
     }
 
+    @Override
+    public void rateUser(int origin, int target, int score){
+        String query = "INSERT INTO score (origin_user, target_user, score) values (?, ?, ?) ";
+        jdbcTemplate.update(query, origin, target, score);
+    }
+
+    @Override
+    public double getRate(int userId){
+        String query = "SELECT avg(score) from score where target_user = ? ;";
+        return jdbcTemplate.queryForObject(query, Double.class, userId);
+    }
+
 }

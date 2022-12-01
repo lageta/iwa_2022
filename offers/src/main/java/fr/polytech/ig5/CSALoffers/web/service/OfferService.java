@@ -42,7 +42,11 @@ public interface OfferService {
 
     void bindKeywords(int offerId, List<Keyword> keywords);
 
+    List<Keyword> findAllKeywordOfUser(int userId);
 
+    void bindKeywordToUser(Keyword keyword, int userId);
+
+    void deleteKeywordsOfUser(int userId);
     void bindAdvantages(int offerId, List<Advantage> advantages);
 
 

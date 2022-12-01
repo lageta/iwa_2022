@@ -123,9 +123,8 @@ public class OfferDaoImpl implements OfferDao{
 
             return null;
         }
-
-
     }
+
     @Override
     public List<Keyword> findAllKeyword(int offerId) {
         try {
@@ -138,9 +137,37 @@ public class OfferDaoImpl implements OfferDao{
 
             return null;
         }
-
-
     }
+
+    @Override
+    public List<Keyword> findAllKeywordOfUser(int userId) {
+        try {
+            return jdbcTemplate.query("SELECT *\n" +
+                    "  FROM keyword\n" +
+                    " WHERE keyword_id IN (select keyword_id from interest where user_id = ?) ", rowMapper.getRowMapperKeyword(), userId);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+    @Override
+    public void bindKeywordToUser(Keyword keyword, int userId){
+        try {
+            jdbcTemplate.update("INSERT INTO interest ( user_id , keyword_id) \n" +
+                            "VALUES (?, ?)",
+                    userId,
+                    keyword.getKeywordId()
+            );
+
+        }
+        catch (Exception e){
+
+        }
+    }
+
+
 
     @Override
     public List<Advantage> findAllAdvantage() {
@@ -170,6 +197,16 @@ public class OfferDaoImpl implements OfferDao{
         }
 
 
+    }
+
+    public void deleteKeywordsOfUser(int userId){
+        try {
+            int res = jdbcTemplate.update("DELETE FROM interest WHERE user_id = ? ", userId);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
     }
 
     @Override

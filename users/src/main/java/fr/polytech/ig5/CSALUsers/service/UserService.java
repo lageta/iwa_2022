@@ -70,4 +70,14 @@ public class UserService implements IUserService {
         return userDao.deleteResume(resumeId);
     }
 
+    @Override
+    public void rateUser(int origin, int target, int score){
+        userDao.rateUser(origin, target, score);
+    }
+
+    @Override
+    public double getRate(int userId){
+        return userDao.getRate(userId);
+    }
+
 }

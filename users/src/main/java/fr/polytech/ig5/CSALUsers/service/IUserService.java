@@ -15,5 +15,7 @@ public interface IUserService {
     Resume addResume(Resume resume);
     Resume updateResume(Resume resume);
     int deleteResume(int resumeId);
+    void rateUser(int origin, int target, int score);
+    double getRate(int userId);
 
 }

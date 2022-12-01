@@ -7,6 +7,7 @@ import fr.polytech.ig5.CSALoffers.model.Advantage;
 import fr.polytech.ig5.CSALoffers.model.Keyword;
 import fr.polytech.ig5.CSALoffers.model.Offer;
 import fr.polytech.ig5.CSALoffers.web.controller.payload.CreatePayload;
+import fr.polytech.ig5.CSALoffers.web.controller.payload.KeywordPayload;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDao;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDaoImpl;
 import fr.polytech.ig5.CSALoffers.web.service.OfferService;
@@ -112,6 +113,20 @@ public class OfferController {
         List<Keyword> keywords = offerService.findAllKeyword();
         if (keywords == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(keywords, HttpStatus.OK);
+    }
+
+    @GetMapping("/keywords/user/{userId}")
+    public List<Keyword> keywordsOfUser(@PathVariable int userId) {
+        return  offerService.findAllKeywordOfUser(userId);
+    }
+
+    @PostMapping("/keywords/user/{userId}")
+    public void bindKeywordsToUser(@PathVariable int userId, @RequestBody KeywordPayload keywords){
+        for(Keyword keyword : keywords.getKeywords()) offerService.bindKeywordToUser(keyword, userId);
+    }
+    @DeleteMapping("/keywords/user/{userId}")
+    public void deleteKeywordsOfUser(@PathVariable int userId){
+        offerService.deleteKeywordsOfUser(userId);
     }
 
     @GetMapping("/advantages")
