@@ -37,8 +37,8 @@ public class AffectJdbcImpl implements AffectJdbcDao {
     @Override
     public Affect create(int offerId, int userId) {
                 try {
-                    return jdbcTemplate.query("INSERT INTO affect ( offer_id, user_id) " +
-                            "VALUES (?, ?) RETURNING *", rowMapper.getRowMapperAffect(), offerId, userId).get(0);
+                    return jdbcTemplate.queryForObject("INSERT INTO affect ( offer_id, user_id) " +
+                            "VALUES (?, ?) RETURNING *", rowMapper.getRowMapperAffect(), offerId, userId);
                 }
                 catch (Exception e){
                     e.printStackTrace();
