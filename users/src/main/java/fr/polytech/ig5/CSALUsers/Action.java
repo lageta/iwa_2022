@@ -1,0 +1,30 @@
+package fr.polytech.ig5.CSALUsers;
+
+public enum Action {
+
+    CREATE_OFFER,
+    CREATE_ADVANTAGE,
+    CREATE_KEYWORD,
+    CREATE_USER,
+    CREATE_AFFECT,
+
+    READ_OFFER,
+    READ_Advantage,
+    READ_KEYWORD,
+    READ_USER,
+    READ_AFFECT,
+
+    UPDATE_OFFER,
+    UPDATE_ADVANTAGE,
+    UPDATE_KEYWORD,
+    UPDATE_USER,
+    UPDATE_AFFECT,
+
+    DELETE_OFFER,
+    DELETE_ADVANTAGE,
+    DELETE_KEYWORD,
+    DELETE_USER,
+    DELETE_AFFECT,
+    ;
+
+}

@@ -1,23 +1,32 @@
 package fr.polytech.ig5.CSALoffers.web.controller;
 
+import fr.polytech.ig5.CSALoffers.Action;
+import fr.polytech.ig5.CSALoffers.RightChecker;
+import fr.polytech.ig5.CSALoffers.Role;
 import fr.polytech.ig5.CSALoffers.model.Advantage;
 import fr.polytech.ig5.CSALoffers.model.Keyword;
 import fr.polytech.ig5.CSALoffers.model.Offer;
 import fr.polytech.ig5.CSALoffers.web.controller.payload.CreatePayload;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDao;
 import fr.polytech.ig5.CSALoffers.web.dao.OfferDaoImpl;
+import fr.polytech.ig5.CSALoffers.web.service.OfferService;
+import fr.polytech.ig5.CSALoffers.web.service.OfferServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
+@EnableWebMvc
 public class OfferController {
+
     @Autowired
-    OfferDao offerDao = new OfferDaoImpl();
+    OfferService offerService = new OfferServiceImpl();
 
     @Autowired
     private KafkaTemplate<String, Offer> kafkaTemplate;
@@ -25,116 +34,229 @@ public class OfferController {
     private static final String TOPIC = "New_Offer";
 
     @GetMapping("/offers")
-    public List<Offer> offers(){
-        return  offerDao.findAll();
+    public ResponseEntity<List<Offer>> offers( @RequestHeader("role") String role){
+        try {
+            if (!RightChecker.CheckRight(Action.READ_OFFER, Role.valueOf(role))) return new ResponseEntity<>( HttpStatus.FORBIDDEN);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+        List<Offer> offers = offerService.findAll();
+        if (offers == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return  new ResponseEntity<>(offers, HttpStatus.OK);
     }
 
     @GetMapping("/offers/user/{userId}")
-    public List<Offer> offersFromUser(@PathVariable int userId){
-        return  offerDao.findAllFromUser(userId);
+    public ResponseEntity<List<Offer>> offersFromUser(@PathVariable int userId, @RequestHeader("role") String role){
+        try {
+            if (!RightChecker.CheckRight(Action.READ_OFFER, Role.valueOf(role)))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Offer> offers = offerService.findAllFromUser(userId);
+        if (offers ==  null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return  new ResponseEntity<>(offers, HttpStatus.OK);
     }
 
     @GetMapping("/offer/{id}")
-    public Offer offer(@PathVariable int id) {
-        return  offerDao.findById(id);
+    public ResponseEntity<Offer> offer(@PathVariable int id, @RequestHeader("role") String role) {
+        try {
+            if (!RightChecker.CheckRight(Action.READ_OFFER, Role.valueOf(role)))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Offer offer = offerService.findById(id);
+        if (offer ==  null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return  new ResponseEntity<>(offer, HttpStatus.OK);
     }
 
     @GetMapping("/offer/{offerId}/keywords")
-    public List<Keyword> keywords(@PathVariable int offerId) {
-        return  offerDao.findAllKeyword(offerId);
+    public ResponseEntity<List<Keyword>> keywords(@PathVariable int offerId, @RequestHeader("role") String role) {
+        try {
+            if (!RightChecker.CheckRight(Action.READ_KEYWORD, Role.valueOf(role)))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Keyword> keywords = offerService.findAllKeyword(offerId);
+        if (keywords == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(keywords, HttpStatus.OK);
     }
 
     @GetMapping("/offer/{advantageId}/advantages")
-    public List<Advantage> advantages(@PathVariable int advantageId) {
-        return  offerDao.findAllAdvantage(advantageId);
+    public ResponseEntity<List<Advantage>> advantages(@PathVariable int advantageId, @RequestHeader("role") String role) {
+    try {
+
+        if (!RightChecker.CheckRight(Action.READ_Advantage, Role.valueOf(role)))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }catch (IllegalArgumentException e) {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+        List<Advantage> advantages = offerService.findAllAdvantage(advantageId);
+        if (advantages == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(advantages, HttpStatus.OK);
     }
 
     @GetMapping("/keywords")
-    public List<Keyword> keywords() {
-        return  offerDao.findAllKeyword();
+    public ResponseEntity<List<Keyword>> keywords( @RequestHeader("role") String role) {
+        try {
+            if (!RightChecker.CheckRight(Action.READ_KEYWORD, Role.valueOf(role)))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Keyword> keywords = offerService.findAllKeyword();
+        if (keywords == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(keywords, HttpStatus.OK);
     }
 
     @GetMapping("/advantages")
-    public List<Advantage> advantages() {
-        return  offerDao.findAllAdvantage();
+    public ResponseEntity<List<Advantage>> advantages(@RequestHeader("role") String role) {
+        try {
+            if (!RightChecker.CheckRight(Action.READ_Advantage, Role.valueOf(role)))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Advantage> advantages =  offerService.findAllAdvantage();
+         if (advantages == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+         return new ResponseEntity<>(advantages, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/offer/{offerId}/keyword/{keywordId}")
-    public void bindKeyword(@PathVariable int offerId, @PathVariable int keywordId) {
-         offerDao.bindKeyword(offerId, keywordId);
-    }
-
-    @PostMapping(value = "/offer/{offerId}/advantage/{advantageId}")
-    public void bindAdvantage(@PathVariable int offerId, @PathVariable int advantageId) {
-        offerDao.bindAdvantage(offerId, advantageId);
-    }
 
     @PostMapping(value = "/offer")
-    public Offer create(@RequestBody CreatePayload payload) {
-        Offer offerCreated = offerDao.save(payload.getOffer());
+    public ResponseEntity<Offer> create(@RequestBody CreatePayload payload, @RequestHeader("role") String role) {
+        try {
+            if (!RightChecker.CheckRight(Action.CREATE_OFFER, Role.valueOf(role)))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Offer offerCreated = offerService.save(payload.getOffer());
+        if (offerCreated == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (payload.getKeywords() != null) {
-            offerDao.bindKeywords(offerCreated.getOfferId(), payload.getKeywords());
+            offerService.bindKeywords(offerCreated.getOfferId(), payload.getKeywords());
             if (offerCreated != null) {
                 kafkaTemplate.send(TOPIC, offerCreated);
             }
         }
 
         if (payload.getAdvantages() != null){
-            offerDao.bindAdvantages(offerCreated.getOfferId(), payload.getAdvantages());
+            offerService.bindAdvantages(offerCreated.getOfferId(), payload.getAdvantages());
         }
 
-        return offerCreated;
+        return new ResponseEntity<>(offerCreated, HttpStatus.CREATED);
     }
 
 
 
     @PutMapping(value = "/offer/{offerId}")
-    public Offer update (@PathVariable int offerId,@RequestBody CreatePayload payload) {
+    public ResponseEntity<Offer> update (@PathVariable int offerId,@RequestBody CreatePayload payload, @RequestHeader("role") String role) {
+        try {
+            if (!RightChecker.CheckRight(Action.UPDATE_OFFER, Role.valueOf(role)))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Offer offer = payload.getOffer();
-        if (offer == null) return null;
+        if (offer == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND) ;
         offer.setOfferId(offerId);
         List<Keyword> keywords = payload.getKeywords();
         if (keywords != null){
-            offerDao.deleteAllTags(offerId);
+            offerService.deleteAllTags(offerId);
             if (keywords.size() > 0){
-                offerDao.bindKeywords(offerId, keywords);
+                offerService.bindKeywords(offerId, keywords);
             }
         }
         List<Advantage> advantages = payload.getAdvantages();
         if (advantages != null){
-            offerDao.deleteAllAdvantages(offerId);
+            offerService.deleteAllAdvantages(offerId);
             if (advantages.size() > 0){
-                offerDao.bindAdvantages(offerId, advantages);
+                offerService.bindAdvantages(offerId, advantages);
             }
         }
-        return offerDao.update(offer);
+        Offer offerUpdated =  offerService.update(offer);
+        if (offerUpdated == null ) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(offerUpdated, HttpStatus.OK);
     }
 
     @DeleteMapping("/offer/{id}")
-    public void delete(@PathVariable int id){
-         offerDao.delete(id);
+    public ResponseEntity<String> delete(@PathVariable int id, @RequestHeader("role") String role){
+        try {
+            if (!RightChecker.CheckRight(Action.DELETE_OFFER, Role.valueOf(role)))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        int res = offerService.delete(id);
+         if (res < 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         if (res == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         return new ResponseEntity(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/offer/{offerId}/keyword/{keywordId}")
-    public void deleteKeyword(@PathVariable int offerId, @PathVariable int keywordId){
-        offerDao.deleteTags(offerId, keywordId);
+    public ResponseEntity<String> deleteKeyword(@PathVariable int offerId, @PathVariable int keywordId, @RequestHeader("role") String role){
+      try {
+          if (!RightChecker.CheckRight(Action.UPDATE_OFFER, Role.valueOf(role)))
+              return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+      }catch (IllegalArgumentException e) {
+          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+        int res = offerService.deleteTags(offerId, keywordId);
+        if ( res < 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (res == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(null, HttpStatus.OK);
     }
     @DeleteMapping("/offer/{offerId}/advantage/{advantageId}")
-    public void deleteAdvantage(@PathVariable int offerId, @PathVariable int advantageId){
-        offerDao.deleteAdvantages(offerId, advantageId);
+    public ResponseEntity<String> deleteAdvantage(@PathVariable int offerId, @PathVariable int advantageId, @RequestHeader("role") String role){
+       try {
+           if (!RightChecker.CheckRight(Action.UPDATE_OFFER, Role.valueOf(role)))
+               return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+       }catch (IllegalArgumentException e) {
+           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+       }
+        int res = offerService.deleteAdvantages(offerId, advantageId);
+        if ( res < 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (res  == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(null, HttpStatus.OK);
     }
     @DeleteMapping("/offer/{offerId}/keywords")
-    public void deleteKeyword(@PathVariable int offerId){
-        offerDao.deleteAllTags(offerId);
+    public ResponseEntity<String> deleteKeyword(@PathVariable int offerId, @RequestHeader("role") String role){
+        try {if (!RightChecker.CheckRight(Action.UPDATE_OFFER, Role.valueOf(role))) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        int res = offerService.deleteAllTags(offerId);
+        if (res < 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (res == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(null, HttpStatus.OK);
     }
     @DeleteMapping("/offer/{offerId}/advantages")
-    public void deleteAdvantage(@PathVariable int offerId){
-        offerDao.deleteAllAdvantages(offerId);
+    public ResponseEntity<String> deleteAdvantage(@PathVariable int offerId, @RequestHeader("role") String role){
+       try { if (!RightChecker.CheckRight(Action.UPDATE_OFFER, Role.valueOf(role))) return new ResponseEntity<>( HttpStatus.FORBIDDEN);
+       }catch (IllegalArgumentException e) {
+           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+       }
+        int res = offerService.deleteAllAdvantages(offerId);
+        if (res < 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (res == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/offers/outdated")
-    public void deleteOutdated(){
-        offerDao.delete(offerDao.outdatedOffers());
+    public ResponseEntity<String> deleteOutdated( @RequestHeader("role") String role){
+      try {  if (!RightChecker.CheckRight(Action.DELETE_OFFER, Role.valueOf(role))) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+      }catch (IllegalArgumentException e) {
+          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+        offerService.delete(offerService.outdatedOffers());
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 
 }
