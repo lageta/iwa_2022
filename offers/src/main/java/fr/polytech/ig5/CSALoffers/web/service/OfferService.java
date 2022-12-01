@@ -1,4 +1,4 @@
-package fr.polytech.ig5.CSALoffers.web.dao;
+package fr.polytech.ig5.CSALoffers.web.service;
 
 import fr.polytech.ig5.CSALoffers.model.Advantage;
 import fr.polytech.ig5.CSALoffers.model.Keyword;
@@ -6,8 +6,8 @@ import fr.polytech.ig5.CSALoffers.model.Offer;
 
 import java.util.List;
 
+public interface OfferService {
 
-public interface OfferDao {
 
     List<Offer> findAll();
 
@@ -17,7 +17,7 @@ public interface OfferDao {
 
     Offer update(Offer offer);
 
-    int delete(int id);
+    int  delete(int id);
 
     List<Keyword> findAllKeyword();
 
@@ -35,9 +35,6 @@ public interface OfferDao {
 
     int deleteAllTags(int offerId);
 
-    void bindKeyword(int offerId, int keywordId);
-
-    void bindAdvantage(int offerId, int advantageId);
 
     List<Offer> outdatedOffers();
 

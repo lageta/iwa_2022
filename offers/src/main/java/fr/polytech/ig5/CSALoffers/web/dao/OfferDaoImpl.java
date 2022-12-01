@@ -99,7 +99,7 @@ public class OfferDaoImpl implements OfferDao{
     }
 
     @Override
-    public void delete(int id) {
+    public int delete(int id) {
         try {
             deleteAllTags(id);
             deleteAllAdvantages(id);
@@ -110,6 +110,7 @@ public class OfferDaoImpl implements OfferDao{
             e.printStackTrace();
         }
 
+        return id;
     }
 
     @Override
