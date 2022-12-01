@@ -127,7 +127,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public double getRate(int userId){
-        String query = "SELECT avg(score) from score where target_user = ? ;";
+        String query = "SELECT coalesce(avg(score), 0) from score where target_user = ? ;";
         return jdbcTemplate.queryForObject(query, Double.class, userId);
     }
 
