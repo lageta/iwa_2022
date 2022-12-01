@@ -16,7 +16,7 @@ public interface AffectRepository extends ReactiveCrudRepository<Affect, Integer
     @Query(value = "SELECT * FROM users WHERE id IN (SELECT user_id FROM affect where offer_id=:offerId)  ")
     Flux<User> findAllUsersByOfferId(@Param("offerId") int offerId);
 
-    @Query(value = "SELECT * FROM offer WHERE offer_id IN (SELECT offer_id FROM affect where user_id=:userId)  ")
+    @Query(value = "SELECT * FROM offer WHERE offer_id IN (SELECT offer_id FROM affect where user_id=:userId and is_accepted = false )  ")
     Flux<Offer> findAllOffersByUserId(@Param("userId") int userId);
 /*
     @Query(value = "SELECT nb_jobs FROM offer WHERE offer_id =:offerId)  ")
