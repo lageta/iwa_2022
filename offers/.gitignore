@@ -35,3 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
+/src/main/java/fr/polytech/ig5/CSALoffers/SecurityConfig.java

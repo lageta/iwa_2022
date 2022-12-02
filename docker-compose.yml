@@ -1,6 +1,28 @@
 version: '3.3'
 
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
   gateway:
     volumes:
       - ./gateway:/usr/src/app
@@ -10,7 +32,19 @@ services:
     depends_on:
       - db
     ports:
-      - 8080:8080
+      - '8080:8080'
+
+  auth:
+    volumes:
+      - ./auth:/usr/src/app
+    build: ./auth
+    image: "auth:latest"
+    container_name: auth
+    depends_on:
+      - db
+    ports:
+      - '8082:8082'
+
 
   offers:
     volumes:
@@ -21,12 +55,59 @@ services:
     depends_on:
       - db
     ports:
-      - 8000:8000
+      - "8000:8000"
+
+  affect:
+    volumes:
+      - ./affect:/usr/src/app
+    build: ./affect
+    image: "affect:latest"
+    container_name: affect
+    depends_on:
+      - db
+    ports:
+      - "7575:7575"
+  users:
+    volumes:
+      - ./users:/usr/src/app
+    build: ./users
+    image: "users:latest"
+    container_name: users
+    depends_on:
+      - db
+    ports:
+      - "8081:8081"
+
+  recommendation:
+    volumes:
+      - ./recommendation:/usr/src/app
+    build: ./recommendation
+    image: "recommendation:latest"
+    container_name: recommendation
+    depends_on:
+      - db
+    ports:
+      - "6060:6060"
+    environment:
+      - SPRING_DATASOURCE_URL
+      - SPRING_DATASOURCE_USERNAME
+      - SPRING_DATASOURCE_PASSWORD
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME
+      - SPRING_DATASOURCE_JDBCURL
+      - SERVER_PORT
+      - SPRING_SECURITY_NAME
+      - SPRING_SECURITY_PASSWORD
+      - SPRING_SECURITY_ROLES
+      - SPRING_MAIL_HOST
+      - SPRING_MAIL_PORT
+      - MAIL_USERNAME
+      - MAIL_PASSWORD
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
 
 
   db:
     image: postgres:15.0-alpine
-    restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -35,6 +116,15 @@ services:
     volumes: 
       - db:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
 volumes:
   db:
     driver: local
