@@ -34,15 +34,20 @@ public class RecommendationDaoImpl implements  RecommendationDao {
     @Override
     public List<User> recommendateUsers(int userid){
         try {
-            return jdbcTemplate.query("Select * from ("
-                          + " Select users.*,count(t1.keyword_id) from interest join"
-                          + " (select * from tags where offer_id = ?) as t1"
-                          + " on interest.keyword_id = t1.keyword_id"
-                          + " join users on users.user_id = interest.user_id"
-                          + " group by users.user_id ) as reco where count>=3"
+            return jdbcTemplate.query("Select * from users where users.id in (\n" +
+                            "\n" +
+                            "Select id from (\n" +
+                            "                   Select users.id,count(t1.keyword_id) from interest join\n" +
+                            "                    (select * from tags where offer_id = ?) as t1\n" +
+                            "                    on interest.keyword_id = t1.keyword_id\n" +
+                            "                         join users on users.id = interest.user_id\n" +
+                            "                      group by users.id ) as reco where count>=3\n" +
+                            "\n" +
+                            ")"
                     , rowMapper.getRowMapperUser(), userid);
         }
         catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

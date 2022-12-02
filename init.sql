@@ -517,8 +517,8 @@ create table user_roles (
 create unique index idx_user_role_id on user_roles (user_id, role_id);
 
 -- Password is admin01@123#
-INSERT INTO users (first_name, last_name, email_address, password)
-VALUES ('Super', 'Admin 01', 'admin01@tw.com', '$2a$10$4LEwPTJ86OF/oZUn8hl0vOhSUhFqX5YwNO./i/bTeTD6cn5lRLj2S');
+INSERT INTO users (resume_id, first_name, last_name, email_address, password)
+VALUES (0, 'Super', 'Admin 01', 'admin01@tw.com', '$2a$10$4LEwPTJ86OF/oZUn8hl0vOhSUhFqX5YwNO./i/bTeTD6cn5lRLj2S');
 
 
 INSERT INTO roles (id, role_name)

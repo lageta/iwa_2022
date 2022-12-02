@@ -26,14 +26,12 @@ public class RowMapper {
     public org.springframework.jdbc.core.RowMapper<User> rowMapperUser = new org.springframework.jdbc.core.RowMapper<User>() {
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             User user = new User();
-            user.setUserId(rs.getInt("user_id"));
+            user.setUserId(rs.getInt("id"));
             user.setResumeId(rs.getInt("resume_id"));
-            user.setUsername(rs.getString("username"));
+            user.setMail(rs.getString("email_address"));
+            user.setFirstname(rs.getString("first_name"));
+            user.setLastname(rs.getString("last_name"));
             user.setPassword(rs.getString("password"));
-            user.setEnabled(rs.getBoolean("enabled"));
-            user.setRole(rs.getString("role"));
-            user.setZone(rs.getInt("zone"));
-            user.setMail(rs.getString("mail"));
             return user;
         }
     };

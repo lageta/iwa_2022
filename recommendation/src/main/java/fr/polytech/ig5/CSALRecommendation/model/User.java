@@ -3,12 +3,12 @@ package fr.polytech.ig5.CSALRecommendation.model;
 public class User {
     private int userId;
     private int resumeId;
-    private String username;
+    private String email_address;
     private String password;
-    private boolean enabled;
-    private String role;
-    private int zone;
-    private String mail;
+
+    private String firstname;
+
+    private String lastname;
 
     /* USER ID */
 
@@ -32,12 +32,12 @@ public class User {
 
     /* USERNAME */
 
-    public String getUsername() {
-        return username;
+    public String getMail() {
+        return email_address;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setMail(String email_address) {
+        this.email_address = email_address;
     }
 
     /* PASSWORD */
@@ -50,48 +50,25 @@ public class User {
         this.password = password;
     }
 
-    /* ENABLED */
 
-    public boolean getEnabled() {
-        return enabled;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    /* ROLE */
-
-    public String getRole() {
-        return role;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    /* ZONE */
-
-    public int getZone() {
-        return zone;
-    }
-
-    public void setZone(int zone) {
-        this.zone = zone;
-    }
-
-    /* MAIL */
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     @Override
     public String toString(){
-        return "{userId="+userId+ ", username="+username+",password="+password+",enabled="+enabled+"}";
+        return "{userId="+userId+ ", email_address="+email_address+",password="+password+"}";
     }
 }
