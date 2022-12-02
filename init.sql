@@ -1,3 +1,16 @@
+
+create table users (
+    id SERIAL UNIQUE,
+    resume_id int,
+    first_name varchar(50) not null,
+    last_name varchar(50) not null,
+    email_address varchar(50) not null,
+    password varchar(500) not null);
+
+create unique index idx_user_email on users (email_address);
+
+
+
 /*==============================================================*/
 /* Nom de SGBD :  PostgreSQL 8                                  */
 /* Date de création :  13/11/2022 16:16:41                      */
@@ -316,7 +329,7 @@ on column RESUME.TITLE_RESUME is
 'Title of the resume ';
 
 comment
-on column RESUME.DESCRIPTION_ is
+on column RESUME.DESCRIPTION_RESUME is
 'Description of a resume';
 
 /*==============================================================*/
@@ -433,12 +446,12 @@ alter table AFFECT
 
 alter table AFFECT
     add constraint FK_AFFECT_IS_AFFECT_USERS foreign key (USER_ID)
-        references USERS (USER_ID)
+        references USERS (id)
         on delete restrict on update restrict;
 
 alter table INTEREST
     add constraint FK_INTEREST_INTEREST_USERS foreign key (USER_ID)
-        references USERS (USER_ID)
+        references USERS (id)
         on delete restrict on update restrict;
 
 alter table INTEREST
@@ -448,12 +461,12 @@ alter table INTEREST
 
 alter table OFFER
     add constraint FK_OFFER_CREATE_USERS foreign key (USER_ID)
-        references USERS (USER_ID)
+        references USERS (id)
         on delete restrict on update restrict;
 
 alter table RECOMMENDATE
     add constraint FK_RECOMMEN_RECOMMEND_USERS foreign key (USER_ID)
-        references USERS (USER_ID)
+        references USERS (id)
         on delete restrict on update restrict;
 
 alter table RECOMMENDATE
@@ -463,17 +476,17 @@ alter table RECOMMENDATE
 
 alter table RESUME
     add constraint FK_RESUME_HAVE2_USERS foreign key (USER_ID)
-        references USERS (USER_ID)
+        references USERS (id)
         on delete restrict on update restrict;
 
 alter table SCORE
     add constraint FK_SCORE_SCORE_USERS foreign key (ORIGIN_USER)
-        references USERS (USER_ID)
+        references USERS (id)
         on delete restrict on update restrict;
 
 alter table SCORE
     add constraint FK_SCORE_SCORE2_USERS foreign key (TARGET_USER)
-        references USERS (USER_ID)
+        references USERS (id)
         on delete restrict on update restrict;
 
 alter table TAGS
@@ -487,15 +500,6 @@ alter table TAGS
         on delete restrict on update restrict;
 
 
-create table users (
-    id SERIAL UNIQUE,
-    resume_id int,
-    first_name varchar(50) not null,
-    last_name varchar(50) not null,
-    email_address varchar(50) not null,
-    password varchar(500) not null);
-
-create unique index idx_user_email on users (email_address);
 
 create table roles (
   id SERIAL UNIQUE,
